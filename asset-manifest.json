@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/physical-presence-days/static/css/main.1bab7d18.css",
+    "main.js": "/physical-presence-days/static/js/main.92f325a3.js",
+    "static/js/787.8565d72c.chunk.js": "/physical-presence-days/static/js/787.8565d72c.chunk.js",
+    "index.html": "/physical-presence-days/index.html",
+    "main.1bab7d18.css.map": "/physical-presence-days/static/css/main.1bab7d18.css.map",
+    "main.92f325a3.js.map": "/physical-presence-days/static/js/main.92f325a3.js.map",
+    "787.8565d72c.chunk.js.map": "/physical-presence-days/static/js/787.8565d72c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1bab7d18.css",
+    "static/js/main.92f325a3.js"
+  ]
+}
