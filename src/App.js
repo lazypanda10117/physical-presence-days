@@ -9,21 +9,10 @@ function App() {
   const [endDate, setEndDate] = useState('');
   const [comment, setComment] = useState('');
   const [datesAway, setDatesAway] = useState([]);
-
-  // useEffect(() => {
-  //   const savedDates = localStorage.getItem('datesAway');
-  //   const savedPrDate = localStorage.getItem('prDate');
-  //   const savedWasNpr = localStorage.getItem('wasNpr');
-  //   const savedApplicationDate = localStorage.getItem('applicationDate');
-
-  //   if (savedDates) setDatesAway(JSON.parse(savedDates), () => { lock += 1; } );
-  //   if (savedPrDate) setPrDate(savedPrDate, () => { lock += 1; });
-  //   if (savedWasNpr) setWasNpr(JSON.parse(savedWasNpr), () => { lock += 1; } );
-  //   if (savedApplicationDate) setApplicationDate(savedApplicationDate, () => { lock += 1; } );
-  // }, []);
   const [loadedStateCount, setLoadedStateCount] = useState(0);
 
   useEffect(() => {
+      console.log("Loading data from local storage.");
       const savedDates = localStorage.getItem('datesAway');
       const savedPrDate = localStorage.getItem('prDate');
       const savedWasNpr = localStorage.getItem('wasNpr');
@@ -67,19 +56,19 @@ function App() {
     }
   }, [applicationDate]);
 
+  // Save on fields update, but not updating until we're fully initialized.
   useEffect(() => {
     if (loadedStateCount < 4) {
       console.log("Progress not saved due to race condition.");
     } else {
       const saveProgress = () => {
-        console.log("Saving Progress", datesAway, prDate, wasNpr, applicationDate);
         localStorage.setItem('datesAway', JSON.stringify(datesAway));
         localStorage.setItem('prDate', prDate);
         localStorage.setItem('wasNpr', wasNpr);
         localStorage.setItem('applicationDate', applicationDate);
+        console.log("Saved progress (dates away, pr date, was temp resident, planned application date):", datesAway, prDate, wasNpr, applicationDate);
       };
       saveProgress();
-      console.log("Progress saved.");
     }
   }, [loadedStateCount, datesAway, prDate, wasNpr, applicationDate]);
 
@@ -137,15 +126,22 @@ function App() {
 
   let maxTotalDaysHereBeforePR = (parsedPrDate - startCountDate) >= 0 ? (parsedPrDate - startCountDate) / (DAYS_IN_MILLISECONDS) : 0;
   if (wasNpr) {
-    totalDaysHereBeforePR = maxTotalDaysHereBeforePR - totalDaysAwayBeforePR < 365 ? maxTotalDaysHereBeforePR - totalDaysAwayAfterPR : 365;
+    totalDaysHereBeforePR = maxTotalDaysHereBeforePR - totalDaysAwayBeforePR < 365 ? maxTotalDaysHereBeforePR - totalDaysAwayBeforePR : 365;
   } else {
     totalDaysAwayBeforePR = 0;
   }
+  console.log("Maximum possible days in Canada before PR within the 5 years timeframe (excluding 365 days limit):", maxTotalDaysHereBeforePR);
+  console.log("Total days away before PR (excluding 365 days limit):", totalDaysAwayBeforePR);
+  console.log("Total days counted before PR (capped at 365 days):", totalDaysHereBeforePR);
 
   let maxTotalDaysHereAfterPR = (parsedApplicationDate - parsedPrDate) / DAYS_IN_MILLISECONDS;
   totalDaysHereAfterPR = maxTotalDaysHereAfterPR - totalDaysAwayAfterPR;
+  console.log("Maximum possible days in Canada after PR within the 5 years timeframe:", maxTotalDaysHereAfterPR);
+  console.log("Total days away before PR:", totalDaysAwayAfterPR);
+  console.log("Total days counted before PR:", totalDaysHereAfterPR);
 
   const totalDaysInCanada = totalDaysHereBeforePR + totalDaysHereAfterPR;
+  console.log("Total days residing in Canada (for the purpose of immigration):", totalDaysInCanada);
 
   return (
     <div className="App">
@@ -193,6 +189,7 @@ function App() {
 
       <h2>Total days in Canada (within the 5 year period): {totalDaysInCanada}</h2>
 
+      Note: The "Left Canada" and "Enter Canada" time is inclusive; we count those two days as part of being inside Canada.
       {/* <div className="input-section">
         <button onClick={saveProgress}>Save Progress</button>
       </div> */}
