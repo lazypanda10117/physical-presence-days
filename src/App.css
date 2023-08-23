@@ -37,7 +37,25 @@ button {
   margin-top: 10px;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-column {
+  width: 200px; /* Adjust to your preference */
+  text-align: left;
+  padding-right: 10px; /* spacing between columns */
+}
+
+.comment-column {
+  width: 250px; /* Adjust to your preference */
+  text-align: left;
+  padding-right: 10px; /* spacing between columns */
+}
+
+.remove-button-column {
+  width: 80px; /* Adjust based on button's width */
+  text-align: center;
 }
